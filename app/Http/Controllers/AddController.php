@@ -50,7 +50,7 @@ class AddController extends Controller
         return redirect()->back()->with('success', 'تمت العملية بنجاح!');
     }
 
-    public function showList(string  $branch)
+    public function showList(string  $branch = "1")
     {
         $stok = Stok::first();
         $data = Bill::orderBy('created_at', 'desc')->take(5)->get()->where('type_branch', $branch);
