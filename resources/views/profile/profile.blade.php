@@ -1,5 +1,3 @@
-{{-- @dd($user) --}}
-
 @section('content')
 @extends('layout.app')
 
@@ -38,7 +36,7 @@
             <div class="col-sm-8">{{$user->created_at}}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-4">
-            <a href="edit.html" class="btn btn-primary">تعديل البيانات</a>
+            <a href="{{ route('EditProfile') }}" class="btn btn-primary">تعديل البيانات</a>
           
             <form action="{{ route('logout') }}" method="POST" class="m-0">
               @csrf

@@ -26,29 +26,6 @@ class AddController extends Controller
      */
 
 
-    public function incomingRegistration(Request $request)
-    {
-
-        $valedate = Validator::make($request->all(), [
-            "toon" => 'required|numeric|max:250',
-            "kg" => 'required|numeric|max:250000',
-        ], [
-            'toon.required' => 'عذرا: ادخل كميه من فضلك',
-            'kg.max' => 'عذرا: انا اقبل بحد اقصي 250طن',
-        ]);
-        if ($valedate->fails()) {
-            return redirect()->back()->withErrors($valedate)->withInput();
-        }
-
-        $toon = $request->input("toon");
-        $kg = $request->input("kg");
-
-        $stok = Stok::firstOrCreate(['id' => 1]);
-        $stok->kgg += $toon;
-        $stok->kg += $kg;
-        $stok->save();
-        return redirect()->back()->with('success', 'تمت العملية بنجاح!');
-    }
 
     public function showList(string  $branch = "1")
     {
@@ -61,21 +38,6 @@ class AddController extends Controller
 
         return view("show_list", ["stoks" => $stok, "data" => $data ,"branch" => $branch]);
     }
-
-
-    public function storeTager(Request $request)
-    {
-        $request->validate([
-            'tager' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
-        ]);
-        Consumer::create([
-            "name" => $request->input("tager"),
-        ]);
-        return to_route("creat_list");
-    }
-
-
-
 
 
     public function create()

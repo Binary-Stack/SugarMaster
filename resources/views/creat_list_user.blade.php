@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-{{-- @dd($users) --}}
-=======
->>>>>>> Stashed changes
-
 @extends('layout.app')
 
 @section('title')

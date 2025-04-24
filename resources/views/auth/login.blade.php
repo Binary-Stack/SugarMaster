@@ -40,7 +40,7 @@
             <div class="col-md-6 col-lg-4">
                 <div class="card p-4 shadow-lg">
                     <h3 class="text-center mb-4">تسجيل الدخول</h3>
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('loginAthentication') }}">
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>

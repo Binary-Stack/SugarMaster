@@ -27,11 +27,30 @@ class ActionsController extends Controller
     }
 
 
+
+    public function storeTager(Request $request)
+    {
+        $request->validate([
+            'tager' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        ]);
+        Consumer::create([
+            "name" => $request->input("tager"),
+        ]);
+        return to_route("creat_list");
+    }
+
+
     public function incomingRegistration(Request $request)
     {
-        $this->Validator($request, "incomingRegistration");
-        $this->checkQuantity($request, "create");
-        return redirect()->route('creat_revenuse')->with('success', 'تمت العملية بنجاح!');
+        $valedate = $this->Validator($request, "incomingRegistration");
+
+        if ($valedate->fails()) {
+            return redirect()->back()->withErrors($valedate)->withInput();
+        }
+        $result =  $this->checkQuantity($request, "create");
+
+        return ($result) ? redirect()->route('creat_revenuse')->with('success', 'تمت العملية بنجاح!')
+            : redirect()->route('creat_revenuse')->withErrors(['error' => 'فشلت العملية']);
     }
 
     public function search(Request $request)
@@ -71,6 +90,33 @@ class ActionsController extends Controller
             'monthlyQuantity' => $monthlyQuantity,
         ]);
     }
+
+    public function searchDate(Request $request)
+    {
+        $items = Bill::whereDate(
+            'created_at',
+            $request->input('actionTimestamp')
+        )
+            ->pluck('kgg');
+        $typeBranches = Bill::whereDate('created_at', $request->input('actionTimestamp'))->pluck('type_branch');
+        $total_sales = 0;
+        $countBranche_1 = 0;
+        $countBranche_2 = 0;
+        for ($i = 0; $i < count($items); $i++) {
+            if ($typeBranches[$i] == 1) {
+                $countBranche_1++;
+            } else {
+                $countBranche_2++;
+            }
+            $total_sales += $items[$i];
+        }
+        return view("total_exchange", [
+            "total_sales" => $total_sales,
+            "countBranche_1" => $countBranche_1,
+            "countBranche_2" => $countBranche_2
+        ]);
+    }
+
 
     public function update(Request $request, string $id)
     {
@@ -126,7 +172,7 @@ class ActionsController extends Controller
         return $data;
     }
 
-    protected function Validator(Request $request, string $status)
+    protected function Validator(Request $request, string $status): object
     {
         if ($status == "storeList") {
             $valedate =  Validator::make($request->all(), [
@@ -147,11 +193,7 @@ class ActionsController extends Controller
                 'kg.max' => 'عذرا: انا اقبل بحد اقصي 250طن',
             ]);
         }
-
-
-        if ($valedate->fails()) {
-            return redirect()->back()->withErrors($valedate)->withInput();
-        }
+        return $valedate;
     }
 
     protected function checkQuantity(Request $request, string $status)
@@ -164,13 +206,11 @@ class ActionsController extends Controller
             } else {
                 $stok->kgg -= $request->input("numberOFhightT");
                 $stok->kg -= $request->input("numberOFhightK");
-                $stok->save();
             }
         } elseif ($status == "create") {
             $stok->kgg += $request->input("toon");
             $stok->kg += $request->input("kg");
-            /* $result = */ $stok->save();
-            // return ( $result ) ? to_route('creat_revenuse_1')->with('success', 'تمت العملية بنجاح!') : to_route('creat_revenuse_1')->withErrors(['error' => 'فشلت العملية']);
         }
+        return $stok->save();
     }
 }
