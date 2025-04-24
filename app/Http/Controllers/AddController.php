@@ -11,6 +11,14 @@ use App\Models\Impot;
 use App\Models\Stok;
 use Carbon\Carbon;
 
+    /* 
+    storeList
+    index_1
+    incomingRegistration
+    search
+    update
+    destroy
+     */
 
 class AddController extends Controller
 {
@@ -18,8 +26,7 @@ class AddController extends Controller
      */
 
 
-    public function store(Request $request)
-
+    public function incomingRegistration(Request $request)
     {
 
         $valedate = Validator::make($request->all(), [
@@ -43,25 +50,24 @@ class AddController extends Controller
         return redirect()->back()->with('success', 'تمت العملية بنجاح!');
     }
 
-    public function show_data()
+    public function showList(string  $branch)
     {
         $stok = Stok::first();
-        $data = Bill::orderBy('created_at', 'desc')->take(5)->get();
-
+        $data = Bill::orderBy('created_at', 'desc')->take(5)->get()->where('type_branch', $branch);
         $data->transform(function ($date) {
             $date->formatted_date = Carbon::parse($date->created_at)->locale('ar')->isoFormat('dddd، YYYY-MM-DD');
             return $date;
         });
 
-        return view("show_list", ["stoks" => $stok, "data" => $data]);
+        return view("show_list", ["stoks" => $stok, "data" => $data ,"branch" => $branch]);
     }
 
 
-
-
-
-    public function index_1(Request $request)
+    public function storeTager(Request $request)
     {
+        $request->validate([
+            'tager' => ['required', 'string', 'max:255', 'regex:/^[\pL\s\-]+$/u'],
+        ]);
         Consumer::create([
             "name" => $request->input("tager"),
         ]);
@@ -72,88 +78,19 @@ class AddController extends Controller
 
 
 
-    public function creat_list()
+    public function create()
     {
         $user = Consumer::all();
         return view('creat_list_user', ['users' => $user]);
     }
 
 
-    public function create_list_1(Request $request)
-    {
-        $valedate = Validator::make($request->all(), [
-            "nameOFtager" => 'required|exists:consumers,id',
-            "numberOFlist" => 'required|integer|min:1',
-            "numberOFhightT" => 'required|numeric|min:0',
-            "numberOFhightK" => 'required|numeric|min:0',
-        ]);
-        if ($valedate->fails()) {
-            return redirect()->back()->withErrors($valedate)->withInput();
-        }
-
-        $stok = Stok::firstOrCreate(['id' => 1]);
-        if ($stok->kgg < $request->input("numberOFhightT") || $stok->kg < $request->input("numberOFhightT")) {
-            return redirect()->back()->withErrors(['error' => 'المخزون غير كاف'])->withInput();
-        } else {
-            $stok->kgg -= $request->input("numberOFhightT");
-            $stok->kg -= $request->input("numberOFhightK");
-            $stok->save();
-        }
-
-        Bill::create([
-            "consumer_id" => $request->input("nameOFtager"),
-            "bills" => $request->input("numberOFlist"),
-            "kgg" =>   $request->input("numberOFhightT"),
-            "kg" =>    $request->input("numberOFhightK"),
-        ]);
-        return redirect()->back()->with('success', 'تمت العملية بنجاح!');
-    }
+ 
 
 
 
 
-    public function search(Request $request)
-    {
-
-        // @dd($request);
-
-        $request->validate([
-            'nameOFtager' => 'required|exists:consumers,id',
-        ]);
-
-        // جلب معرف التاجر من النموذج
-        $userId = $request->input('nameOFtager');
-
-        // البحث عن بيانات التاجر
-        $user = Consumer::find($userId);
-
-        // جلب جميع الفواتير المرتبطة بهذا التاجر
-        $bills = Bill::where('consumer_id', $userId)->get();
-
-        $bills->transform(function ($date) {
-            $date->formatted_date = Carbon::parse($date->created_at)->locale('ar')->isoFormat('dddd، YYYY-MM-DD');
-            return $date;
-        });
-        // حساب عدد الفواتير المصروفة خلال الشهر
-        $startOfMonth = Carbon::now()->startOfMonth(); // بداية الشهر الحالي
-        $endOfMonth = Carbon::now()->endOfMonth(); // نهاية الشهر الحالي
-
-        $monthlyBillsCount = Bill::where('consumer_id', $userId)
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->count(); // عدد الفواتير
-
-        $monthlyQuantity = Bill::where('consumer_id', $userId)
-            ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->sum('kg'); // مجموع الكمية المصروفة بالكيلو
-
-        // إرجاع النتائج إلى الواجهة
-        return view('show_list_tager', [
-            'user' => $user,
-            'bills' => $bills,
-            'monthlyBillsCount' => $monthlyBillsCount,
-            'monthlyQuantity' => $monthlyQuantity,
-        ]);
-    }
+ 
 
 
 
@@ -214,40 +151,24 @@ class AddController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+
+
+
+
+
+
+
+    protected function fillingColumns(Request $request, string | null $path)
     {
-        $updata = Bill::findOrFail($id);
-
-        $stok = Stok::firstOrCreate();
-        $stok->kgg += $updata->kgg;
-        $stok->kg += $updata->kg;
-        $stok->save();
-
-        $updata->update([
-            "bills" => $request->numberOFlist,
-            "kgg" => $request->numberOFhightT,
-            "kg" => $request->numberOFhightK,
-            "consumer_id" => $request->nameOFtager,
+        $data =  Bill::create([
+            "consumer_id" => $request->input("nameOFtager"),
+            "type_branch" => $request->input("type_branch"),
+            'type_list' => $request->filled('type_list') ? $request->input('type_list') : 0,
+            "images" => $path,
+            "bills" => $request->input("numberOFlist"),
+            "kgg" =>   $request->input("numberOFhightT"),
+            "kg" =>    $request->input("numberOFhightK"),
         ]);
-
-        $stok->kgg -= $updata->kgg;
-        $stok->kg -= $updata->kg;
-        $stok->save();
-
-        return to_route('show_list');
-    }
-
-
-
-    public function destroy(string $id)
-    {
-        $bill = Bill::find($id);
-        $stok = Stok::firstOrCreate(['id' => 1]);
-        $stok->kgg += $bill->kgg;
-        $stok->kg += $bill->kg;
-        $stok->save();
-        $bill->delete();
-
-        return to_route('show_list');
+        return $data;
     }
 }

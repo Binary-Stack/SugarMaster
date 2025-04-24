@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use App\Notifications\WelcomeNotification;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -42,9 +42,9 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
+        // $user->notify(new WelcomeNotification()); 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+    return redirect(route('show_list', absolute: false));
     }
 }
