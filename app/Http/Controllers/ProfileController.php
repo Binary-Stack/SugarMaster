@@ -8,16 +8,46 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function showProfile() {
+    public function showProfile(string $status = "show")
+    {
         $user = Auth::user();
-        return view("profile.profile" , ['user' => $user]);
-    } 
+        if($status == "edit") {
+
+            return view("profile.edit_profile", ['user' => $user]);
+        }
+        return view("profile.profile", ['user' => $user]);
+    }
+
+    public function updateProfile(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+    
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+    
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+            $user->image = $imagePath;  
+        }
+    
+        $user->save();
+    
+        return redirect()->route('profile', $user->id)->with('success', 'تم تحديث البيانات بنجاح');
+    }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [

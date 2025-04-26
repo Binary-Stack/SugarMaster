@@ -58,7 +58,37 @@
             </div>
         </div>
     </nav>
-
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" id="error-alert" 
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 500px; z-index: 1050; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <ul class="list-unstyled mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    <script>
+    setTimeout(function() {
+        $("#error-alert").fadeOut(500);
+    }, 4000);
+    </script>
+    @endif
+    
+    <!-- تحسين رسائل النجاح -->
+    @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" id="success-alert"
+         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 500px; z-index: 1050; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {{ session('success') }}
+    </div>
+    <script>
+    setTimeout(function() {
+        $("#success-alert").fadeOut(500);
+    }, 3000);
+    </script>
+    @endif
+    
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,3 +1,82 @@
+# Invoice and Inventory Management System
+
+This is a Laravel-based system designed to manage sales invoices, customers (traders), and stock quantities for a food packing factory. It supports multiple branches and provides daily and monthly reporting features.
+
+## Features
+
+- **Invoices Management**
+  - Add new invoices with quantities and customer info.
+  - Edit and delete existing invoices.
+  - Link each invoice to a customer and a branch.
+
+- **Customers (Traders)**
+  - Add new customers to the system.
+  - Search and filter invoices by customer.
+  - View monthly stats per customer (number of invoices, total quantity).
+
+- **Stock Management**
+  - Automatically updates stock when invoices are created, updated, or deleted.
+  - Manual incoming stock registration.
+  - Ensures sufficient stock before creating invoices.
+
+- **Reports**
+  - Daily report with total quantity and branch distribution.
+  - Monthly customer statistics.
+  - Full exchange history view (comprehensive or by date).
+
+- **User Profile**
+  - Update personal data and profile picture.
+  - Change password after verifying the current one.
+
+## Technology Stack
+
+- Laravel 10+
+- PHP 8.1+
+- MySQL
+- Blade templates
+- Bootstrap 5
+- Carbon (for date formatting in Arabic)
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/invoice-stock-system.git
+   cd invoice-stock-system
+
+
+
+Install dependencies:
+
+composer install
+npm install && npm run dev
+
+Set up environment:
+
+cp .env.example .env
+php artisan key:generate
+
+
+
+
+Set database credentials in .env, then run:
+
+php artisan migrate
+
+
+
+
+Link storage for images:
+
+php artisan storage:link
+
+
+
+Run the app:
+
+php artisan serve
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

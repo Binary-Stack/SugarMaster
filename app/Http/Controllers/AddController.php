@@ -22,15 +22,12 @@ use Carbon\Carbon;
 
 class AddController extends Controller
 {
-    /*
-     */
-
-
-
     public function showList(string  $branch = "1")
     {
         $stok = Stok::first();
-        $data = Bill::orderBy('created_at', 'desc')->take(5)->get()->where('type_branch', $branch);
+        $data = Bill::where('type_branch', $branch)
+    ->orderBy('created_at', 'desc')
+    ->get();
         $data->transform(function ($date) {
             $date->formatted_date = Carbon::parse($date->created_at)->locale('ar')->isoFormat('dddd، YYYY-MM-DD');
             return $date;
@@ -40,51 +37,12 @@ class AddController extends Controller
     }
 
 
+
     public function create()
     {
         $user = Consumer::all();
         return view('creat_list_user', ['users' => $user]);
     }
-
-
- 
-
-
-
-
- 
-
-
-
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
-
-
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     */
     public function show_taking()
     {
         $stok = Stok::first();
@@ -92,33 +50,12 @@ class AddController extends Controller
         return view('show_taking', ['stok' => $stok, 'users' => $user]);
     }
 
-
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $bill = Bill::findOrFail($id);
         $user = Consumer::all();
         return view('edit_1', ['users' => $user, 'bills' => $bill]);
     }
-
-
-
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-
-
-
-
-
-
 
     protected function fillingColumns(Request $request, string | null $path)
     {

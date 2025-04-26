@@ -23,16 +23,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <form action="{{route('searchDate')}}" method="POST">
+                        <form action="{{route('searchDate' )}}" method="POST">
                             @csrf
                             <label for="actionTimestamp" class="form-label fw-bold">جرد(اليوميه)</label>
-                            <input type="date" id="actionTimestamp" name="actionTimestamp" class="form-control">
+                            <input type="date" id="actionTimestamp" required name="actionTimestamp" class="form-control">
                             <button type="submit" class="btn btn-primary w-100">ابحث</button>
                         </form>
                     </div>
 
                     <div class="mb-3">
-                        <form action="{{route('searchDate')}}" method="POST">
+                        <form action="{{route('searchDateComprehensive')}}" method="POST">
                             @csrf
                             <label for="actionTimestamp" class="form-label fw-bold">جرد(اليوميه) شامل</label>
                             <input type="hidden" id="actionTimestamp" name="hidden" class="form-control">
@@ -84,6 +84,9 @@
 </div>
 
 <script>
+
+
+
 function calculateRemaining() {
     let kmia_1 = document.getElementById('kmia_1');
     let kmia_2 = document.getElementById('kmia_2');
@@ -91,10 +94,31 @@ function calculateRemaining() {
     
     if(kmia_2.value == "") {
         kmia_3.value = "";
-    } else {
-        kmia_3.value = (parseFloat(kmia_1.value) - parseFloat(kmia_2.value)).toFixed(2);
+        return;
     }
+    
+    let remaining = parseFloat(kmia_1.value);
+    let packed = parseFloat(kmia_2.value);
+    
+    if (packed > remaining) {
+        kmia_2.value = remaining.toFixed(2);
+        packed = remaining;
+        alert("لا يمكن تعبئة كمية أكبر من المتوفرة");
+    }
+    
+    kmia_3.value = (remaining - packed).toFixed(2);
 }
+
+$(document).ready(function() {
+    
+    $('#kmia_2').on('input', function() {
+        if (parseFloat(this.value) < 0) {
+            this.value = 0;
+        }
+        calculateRemaining();
+    });
+});
+
 
 $(document).ready(function() {
     // Initialize select2 for better dropdown experience

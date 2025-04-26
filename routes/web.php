@@ -18,8 +18,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/stock_taking', [AddController::class, 'show_taking'])->name('stock_taking');
     Route::get('/edit_1/{id}', [AddController::class, "edit"])->name('edit_1');
 
-    Route::get('/profile', [Profile::class, 'showProfile'])->name('profile');
-    Route::get('/EditProfile', [ActionsController::class, 'EditProfile'])->name('EditProfile');
+    Route::get('/profile/{status?}', [Profile::class, 'showProfile'])->name('profile');
+
+    // Route::put('/updateProfile/{id}', [Profile::class, 'updateProfile'])->name('updateProfile');
+
 
 
     require __DIR__ . '/actions.php';

@@ -19,42 +19,6 @@
             display: none;
         }
     </style>
-
-
-    @if ($errors->any())
-        <div class="alert alert-danger z-1" id="error-alert"
-            style="width: 50%; margin-left: 30%; text-align: center; position: absolute;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-
-        <script>
-            setTimeout(function() {
-                document.getElementById('error-alert').style.display = 'none';
-            }, 5000); // يمكنك تغيير 5000 إلى عدد الثواني المطلوب
-        </script>
-    @endif
-
-
-    @if (session('success'))
-        <div class="alert alert-success z-1" id="error-alert_1"
-            style="width: 50%; margin-left: 30%; text-align: center; position: absolute;">
-            {{ session('success') }}
-        </div>
-
-        <script>
-            setTimeout(function() {
-                document.getElementById('error-alert_1').style.display = 'none';
-            }, 800);
-        </script>
-    @endif
-
-
-
-
     <div class="d-flex">
         <div class="card    position-absolute  end-0 mt-1     col-4 " style="width: 13rem; font-size: 16px; ">
             <div class="card-header bg-primary text-light text-end">
@@ -76,18 +40,18 @@
 
 
         <div class="col-4" style="margin-left:400px;">
-            <div class="alert alert-dark fs-5 p-1 mt-5  w-30  text-center" role="alert">
-                (حد اقصي(150))قاءمة صرف فواتير هذا الشهر
-            </div>
+            <div class="alert alert-primary  fs-5 p-1 mt-5    text-center" role="alert">قاءمة صرف فواتير هذا الشهر</div>
         </div>
     </div>
 
 
     <div class="d-flex justify-content-center gap-3 mt-4">
-        <a class="btn btn-outline-primary @if ($branch == 1) {{ 'active' }} @endif"
-            href="{{ route('show_list', ['branch' => 1]) }}"> فواتير جمله 1</a>
         <a class="btn btn-outline-primary @if ($branch == 2) {{ 'active' }} @endif "
             href="{{ route('show_list', ['branch' => 2]) }}">فواتير جمله 2</a>
+        <a class="btn btn-outline-primary @if ($branch == 1) {{ 'active' }} @endif"
+            href="{{ route('show_list', ['branch' => 1]) }}"> فواتير جمله 1</a>
+            <a class="btn btn-outline-primary @if ($branch == 3) {{ 'active' }} @endif "
+            href="{{ route('show_list', ['branch' => 3]) }}">الاخطارات</a>
     </div>
 
 
@@ -138,19 +102,50 @@
                                     <span class="text-muted">...</span>
                                 @endif
                             </td>
-                            <th scope="row">{{ $date->bills }} </th>
+                            <th scope="row">
+                                {{ $date->bills }}</th>
                             <td>{{ $date->consumer->name }}</td>
                             <td style="font-size: 20px">{{ $date->kgg }}طن</td>
                             <td style="font-size: 20px">{{ $date->kg }}كيلوا</td>
                             <td>{{ $date->formatted_date }}</td>
                             <td><a href="{{ route('edit_1', $date['id']) }}" class="btn btn-primary">تعديل</a></td>
                             <td>
-                                <form action="{{ route('the_5_D', $date['id']) }}" method="POST">
+                                <form action="{{ route('Destroy', [$date['id'] , 'branch' => $branch]) }}" method="POST"
+                                    id="delete-form-{{ $date->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">حذف</button>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal_{{ $date->id }}">حذف</button>
                                 </form>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="confirmDeleteModal_{{ $date->id }}" tabindex="-1"
+                                    aria-labelledby="modalLabel_{{ $date->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content text-center">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">تأكيد الحذف</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="إغلاق"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                هل أنت متأكد أنك تريد حذف  الفاتورة {{$date->bills}}؟
+                                            </div>
+                                            <div class="modal-body">
+                                                تحزير: لن يتم اضافه كميه الفاتوره {{$date->kg}}كغ الي المخزون
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">إلغاء</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    onclick="document.getElementById('delete-form-{{ $date->id }}').submit();">تأكيد
+                                                    الحذف</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
+
                         </tr>
                     @endforeach
             </tbody>

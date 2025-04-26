@@ -8,7 +8,6 @@ class Bill extends Model
 {
     protected $fillable = [ 
         'bills',
-        'type_list',
         'images',
         'type_branch',
         'consumer_id',

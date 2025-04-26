@@ -10,7 +10,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('type_branch');
-            $table->tinyInteger('type_list')->default(0);
+            // $table->tinyInteger('type_list')->default(0);
             $table->string('images' , 255)->nullable();
             $table->unsignedBigInteger('consumer_id'); 
             $table->integer('bills'); 

@@ -8,7 +8,7 @@
       <div class="col-md-8">
         <div class="card shadow-sm p-4">
             <div class="text-end mb-3">
-                <img src="{{ asset('images/user.png') }}" 
+                <img src="{{ asset('storage/' . $user->image) }}" 
                      alt="صورة المستخدم" 
                      class="rounded-circle img-thumbnail profile-thumb"
                      style="width: 60px; cursor: pointer;"
@@ -36,7 +36,8 @@
             <div class="col-sm-8">{{$user->created_at}}</div>
           </div>
           <div class="d-flex justify-content-between align-items-center mt-4">
-            <a href="{{ route('EditProfile') }}" class="btn btn-primary">تعديل البيانات</a>
+            <a href="{{ route('profile' , ['status' => "edit"  ]) }}" class="btn btn-primary">تعديل البيانات</a>
+            {{-- <a href="{{ route('EditPassword') }}" class="btn btn-primary">تغيير كلمه المرور</a> --}}
           
             <form action="{{ route('logout') }}" method="POST" class="m-0">
               @csrf
@@ -52,7 +53,7 @@
   <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content p-3">
-              <img src="{{ asset('images/user.png') }}" 
+              <img src="{{ asset('storage/' . $user->image) }} " 
               alt="الصورة المكبرة"
               class="img-fluid rounded">
             </div>

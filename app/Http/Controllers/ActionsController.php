@@ -8,18 +8,26 @@ use App\Models\Stok;
 use App\Models\Consumer;
 use App\Models\Impot;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ActionsController extends Controller
 {
     public function storeList(Request $request)
     {
-        $this->Validator($request, "storeList");
+        $valedate = $this->Validator($request, "storeList");
+        if ($valedate->fails()) {
+            return redirect()->back()->withErrors($valedate)->withInput();
+        }
 
         $path = ($request->hasFile('photo')) ? $request->file('photo')->store('images', 'public') : null;
 
-        $this->checkQuantity($request, "check");
+        $check = $this->checkQuantity($request, "check");
+        if ($check == false) {
+
+            return redirect()->back()->withErrors(['error' => 'المخزون غير كاف'])->withInput();
+        }
 
         $bill = $this->fillingColumns($request, $path);
 
@@ -93,64 +101,76 @@ class ActionsController extends Controller
 
     public function searchDate(Request $request)
     {
-        $items = Bill::whereDate(
-            'created_at',
-            $request->input('actionTimestamp')
-        )
-            ->pluck('kgg');
-        $typeBranches = Bill::whereDate('created_at', $request->input('actionTimestamp'))->pluck('type_branch');
-        $total_sales = 0;
-        $countBranche_1 = 0;
-        $countBranche_2 = 0;
-        for ($i = 0; $i < count($items); $i++) {
-            if ($typeBranches[$i] == 1) {
-                $countBranche_1++;
-            } else {
-                $countBranche_2++;
-            }
-            $total_sales += $items[$i];
-        }
-        return view("total_exchange", [
-            "total_sales" => $total_sales,
-            "countBranche_1" => $countBranche_1,
-            "countBranche_2" => $countBranche_2
+        $request->validate([
+            'actionTimestamp' => 'required|date',
         ]);
+
+        return $this->returnExchange($request,  "alone" , "total_exchange");
     }
 
 
-    public function update(Request $request, string $id)
+    public function searchDateComprehensive(Request $request)
     {
-        $updata = Bill::findOrFail($id);
 
+
+        return $this->returnExchange($request, "comprehensive" , "comprehensive_exchange");
+
+    }
+
+
+    public function update(Request $request, string $id  ,string $branch)
+    {
+        $validatedData = $request->validate([
+            'numberOFlist' => 'required|numeric',
+            'nameOFtager' => 'required|exists:consumers,id',
+            'numberOFhightT' => 'required|numeric|min:0',
+            'numberOFhightK' => 'required|numeric|min:0',
+            'type_branch' => 'required|in:1,2,3',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        
+        $updata = Bill::findOrFail($id);
+        
         $stok = Stok::firstOrCreate();
+        
         $stok->kgg += $updata->kgg;
         $stok->kg += $updata->kg;
         $stok->save();
-
-        $updata->update([
-            "bills" => $request->numberOFlist,
-            "kgg" => $request->numberOFhightT,
-            "kg" => $request->numberOFhightK,
-            "consumer_id" => $request->nameOFtager,
-        ]);
-
+        
+        $updateData = [
+            "bills" => filter_var($request->numberOFlist, FILTER_SANITIZE_NUMBER_INT),
+            "kgg" => filter_var($request->numberOFhightT, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+            "kg" => filter_var($request->numberOFhightK, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+            "user_id" => filter_var($request->nameOFtager, FILTER_SANITIZE_NUMBER_INT),
+            "type_branch" => filter_var($request->type_branch, FILTER_SANITIZE_NUMBER_INT)
+        ];
+        
+        if ($request->hasFile('photo')) {
+            if ($updata->photo && Storage::disk('public')->exists($updata->photo)) {
+                Storage::disk('public')->delete($updata->photo);
+            }
+            
+            $photo = $request->file('photo');
+            $photoPath = $photo->store('bills_photos', 'public');
+            $updateData['photo'] = $photoPath;
+        }
+        
+        $updata->update($updateData);
+        
         $stok->kgg -= $updata->kgg;
         $stok->kg -= $updata->kg;
         $stok->save();
-
-        return to_route('show_list');
+        
+        return to_route('show_list' , ['branch' => $branch])->with('success', 'تم تحديث البيانات بنجاح');
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id , string $branch)
     {
         $bill = Bill::find($id);
-        $stok = Stok::firstOrCreate(['id' => 1]);
-        $stok->kgg += $bill->kgg;
-        $stok->kg += $bill->kg;
-        $stok->save();
         $bill->delete();
 
-        return to_route('show_list');
+        return to_route('show_list', ['branch' => $branch])->with('success', 'تمت العملية بنجاح!');
+
     }
 
 
@@ -163,7 +183,7 @@ class ActionsController extends Controller
         $data =  Bill::create([
             "consumer_id" => $request->input("nameOFtager"),
             "type_branch" => $request->input("type_branch"),
-            'type_list' => $request->filled('type_list') ? $request->input('type_list') : 0,
+            // 'type_list' => $request->filled('type_list') ? $request->input('type_list') : 0,
             "images" => $path,
             "bills" => $request->input("numberOFlist"),
             "kgg" =>   $request->input("numberOFhightT"),
@@ -178,9 +198,8 @@ class ActionsController extends Controller
             $valedate =  Validator::make($request->all(), [
                 "nameOFtager" => 'required|exists:consumers,id',
                 "numberOFlist" => 'required|integer|min:1',
-                "type_branch" => 'required|integer|max:2',
+                "type_branch" => 'required|integer|in:1,2,3',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                "type_list" => 'integer|max:1',
                 "numberOFhightT" => 'required|numeric|min:0',
                 "numberOFhightK" => 'required|numeric|min:0',
             ]);
@@ -202,7 +221,7 @@ class ActionsController extends Controller
         if ($status == "check") {
 
             if ($stok->kgg < $request->input("numberOFhightT") || $stok->kg < $request->input("numberOFhightT")) {
-                return redirect()->back()->withErrors(['error' => 'المخزون غير كاف'])->withInput();
+                return false;
             } else {
                 $stok->kgg -= $request->input("numberOFhightT");
                 $stok->kg -= $request->input("numberOFhightK");
@@ -212,5 +231,61 @@ class ActionsController extends Controller
             $stok->kg += $request->input("kg");
         }
         return $stok->save();
+    }
+
+    public function returnExchange(Request $request, $status, string $view)
+    {
+        if ($status == "alone") {
+            $bills = Bill::whereDate('created_at', $request->input('actionTimestamp'))
+                ->select('kgg', 'type_branch')
+                ->get();
+        } elseif ($status == "comprehensive") {
+            App::setLocale('ar');
+            Carbon::setLocale('ar');
+            $bills = Bill::selectRaw("
+    DATE(created_at) as date_only, 
+    SUM(kgg) as total_bills,
+    COUNT(CASE WHEN type_branch = 1 THEN 1 END) as branch_1,
+    COUNT(CASE WHEN type_branch = 2 THEN 1 END) as branch_2,
+    COUNT(CASE WHEN type_branch = 3 THEN 1 END) as branch_3
+")
+->groupBy('date_only')
+->orderByDesc('date_only')
+->get();
+$bills->transform(function ($item) {
+    $carbonDate = Carbon::parse($item->date_only);
+    $item->formatted_date = $carbonDate->translatedFormat('l d F Y'); 
+    $item->day_name = $carbonDate->translatedFormat('l'); 
+    return $item;
+});
+            return view( $view , [
+                "bills" => $bills
+            ]);
+        }
+
+        $total_sales = 0;
+        $countBranche_1 = 0;
+        $countBranche_2 = 0;
+        $countBranche_3 = 0;
+        foreach ($bills as $bill) {
+            switch ($bill->type_branch) {
+                case 1:
+                    $countBranche_1++;
+                    break;
+                case 2:
+                    $countBranche_2++;
+                    break;
+                case 3:
+                    $countBranche_3++;
+                    break;
+            }
+            $total_sales += $bill->kgg;
+        }
+        return view($view, [
+            "total_sales" => $total_sales,
+            "countBranche_1" => $countBranche_1,
+            "countBranche_2" => $countBranche_2,
+            "countBranche_3" => $countBranche_3
+        ]);
     }
 }

@@ -99,11 +99,21 @@
     <!-- Sales Summary -->
     <div class="container mt-2">
         <div class="row">
+
             <div class="col-md-4 mb-3">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <h6 class="text-muted mb-2">إجمالي الصرف</h6>
-                        <h3 class="display-5 fw-bold text-primary mb-0">{{ $total_sales }}طن</h3>
+                        <h3 class="display-5 fw-bold text-primary mb-0">{{ $total_sales ?? 0 }}طن</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <h6 class="text-muted mb-2">إجمالي الصرف</h6>
+                        <h3 class="display-5 fw-bold text-primary mb-0">{{ $total_sales ? $total_sales * 1000 : 0; }}كغ</h3>
                     </div>
                 </div>
             </div>
@@ -112,7 +122,7 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <h6 class="text-muted mb-2">جمله (1)</h6>
-                        <h3 class="display-5 fw-bold text-success mb-0">{{ $countBranche_1 ?? 0 }}فاتوره</h3>
+                        <h3 class="display-5 fw-bold text-success mb-0">{{ $countBranche_1 ?? 0 }} فاتوره</h3>
                     </div>
                 </div>
             </div>
@@ -121,10 +131,20 @@
                 <div class="card border-0 shadow-sm">
                     <div class="card-body text-center p-4">
                         <h6 class="text-muted mb-2">جمله (2)</h6>
-                        <h3 class="display-5 fw-bold text-info mb-0">{{ $countBranche_2 ?? 0 }}فاتوره</h3>
+                        <h3 class="display-5 fw-bold text-info mb-0">{{ $countBranche_2 ?? 0 }} فاتوره</h3>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <h6 class="text-muted mb-2">اخطار</h6>
+                        <h3 class="display-5 fw-bold text-info mb-0">{{ $countBranche_3 ?? 0 }} أخطار</h3>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
