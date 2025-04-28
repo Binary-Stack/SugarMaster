@@ -9,6 +9,11 @@ use  App\Http\Controllers\ProfileController as Profile;
 Route::middleware('auth')->group(function () {
 
     Route::get('/branch/{branch?}', [AddController::class, 'showList'])->name('show_list');
+
+    Route::get('/1', function() {
+        return redirect()->route('show_list');
+    });
+     
     Route::get('/creat_list', [AddController::class, 'create'])->name('creat_list');
 
     Route::get('/creat_revenuse', function () {
