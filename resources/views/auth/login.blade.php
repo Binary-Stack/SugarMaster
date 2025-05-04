@@ -44,7 +44,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">البريد الإلكتروني</label>
-                            <input type="email" name="email" class="form-control" id="email" required>
+                            <input type="email" name="email" class="form-control" value="{{old('email')}}" id="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">كلمة المرور</label>

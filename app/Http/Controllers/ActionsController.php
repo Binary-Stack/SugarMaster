@@ -105,7 +105,7 @@ class ActionsController extends Controller
             'actionTimestamp' => 'required|date',
         ]);
 
-        return $this->returnExchange($request,  "alone" , "total_exchange");
+        return $this->returnExchange($request,  "alone", "total_exchange");
     }
 
 
@@ -113,12 +113,11 @@ class ActionsController extends Controller
     {
 
 
-        return $this->returnExchange($request, "comprehensive" , "comprehensive_exchange");
-
+        return $this->returnExchange($request, "comprehensive", "comprehensive_exchange");
     }
 
 
-    public function update(Request $request, string $id  ,string $branch)
+    public function update(Request $request, string $id, string $branch)
     {
         $validatedData = $request->validate([
             'numberOFlist' => 'required|numeric',
@@ -128,15 +127,15 @@ class ActionsController extends Controller
             'type_branch' => 'required|in:1,2,3',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        
+
         $updata = Bill::findOrFail($id);
-        
+
         $stok = Stok::firstOrCreate();
-        
+
         $stok->kgg += $updata->kgg;
         $stok->kg += $updata->kg;
         $stok->save();
-        
+
         $updateData = [
             "bills" => filter_var($request->numberOFlist, FILTER_SANITIZE_NUMBER_INT),
             "kgg" => filter_var($request->numberOFhightT, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
@@ -144,33 +143,32 @@ class ActionsController extends Controller
             "user_id" => filter_var($request->nameOFtager, FILTER_SANITIZE_NUMBER_INT),
             "type_branch" => filter_var($request->type_branch, FILTER_SANITIZE_NUMBER_INT)
         ];
-        
+
         if ($request->hasFile('photo')) {
             if ($updata->photo && Storage::disk('public')->exists($updata->photo)) {
                 Storage::disk('public')->delete($updata->photo);
             }
-            
+
             $photo = $request->file('photo');
             $photoPath = $photo->store('bills_photos', 'public');
             $updateData['photo'] = $photoPath;
         }
-        
+
         $updata->update($updateData);
-        
+
         $stok->kgg -= $updata->kgg;
         $stok->kg -= $updata->kg;
         $stok->save();
-        
-        return to_route('show_list' , ['branch' => $branch])->with('success', 'تم تحديث البيانات بنجاح');
+
+        return to_route('show_list', ['branch' => $branch])->with('success', 'تم تحديث البيانات بنجاح');
     }
 
-    public function destroy(string $id , string $branch)
+    public function destroy(string $id, string $branch)
     {
         $bill = Bill::find($id);
         $bill->delete();
 
         return to_route('show_list', ['branch' => $branch])->with('success', 'تمت العملية بنجاح!');
-
     }
 
 
@@ -249,16 +247,16 @@ class ActionsController extends Controller
     COUNT(CASE WHEN type_branch = 2 THEN 1 END) as branch_2,
     COUNT(CASE WHEN type_branch = 3 THEN 1 END) as branch_3
 ")
-->groupBy('date_only')
-->orderByDesc('date_only')
-->get();
-$bills->transform(function ($item) {
-    $carbonDate = Carbon::parse($item->date_only);
-    $item->formatted_date = $carbonDate->translatedFormat('l d F Y'); 
-    $item->day_name = $carbonDate->translatedFormat('l'); 
-    return $item;
-});
-            return view( $view , [
+                ->groupBy('date_only')
+                ->orderByDesc('date_only')
+                ->get();
+            $bills->transform(function ($item) {
+                $carbonDate = Carbon::parse($item->date_only);
+                $item->formatted_date = $carbonDate->translatedFormat('l d F Y');
+                $item->day_name = $carbonDate->translatedFormat('l');
+                return $item;
+            });
+            return view($view, [
                 "bills" => $bills
             ]);
         }
