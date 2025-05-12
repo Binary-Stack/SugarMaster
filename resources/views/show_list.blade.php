@@ -19,9 +19,9 @@
             display: none;
         }
     </style>
-    <div class="d-flex">
-        <div class="card    position-absolute  end-0 mt-1     col-4 " style="width: 13rem; font-size: 16px; ">
-            <div class="card-header bg-primary text-light text-end">
+    <div class="d-flex head-card">
+        <div class="card" style="width: 13rem; font-size: 16px; ">
+            <div class="card-header bg-primary text-light">
                 الكميه بالمخازن
             </div>
             <ul class="list-group list-group-flush">
@@ -39,25 +39,25 @@
 
 
 
-        <div class="col-4" style="margin-left:400px;">
-            <div class="alert alert-primary  fs-5 p-1 mt-5    text-center" role="alert">قاءمة صرف فواتير هذا الشهر</div>
+        <div class="col-4 alert-box">
+            <div role="alert">قائمة صرف فواتير هذا الشهر</div>
         </div>
     </div>
 
 
     <div class="d-flex justify-content-center gap-3 mt-4">
-        <a class="btn btn-outline-primary @if ($branch == 2) {{ 'active' }} @endif "
-            href="{{ route('show_list', ['branch' => 2]) }}">فواتير جمله 2</a>
+        <a class="btn btn-outline-primary @if ($branch == 3) {{ 'active' }} @endif "
+            href="{{ route('show_list', ['branch' => 3]) }}">الاخطارات</a>
         <a class="btn btn-outline-primary @if ($branch == 1) {{ 'active' }} @endif"
             href="{{ route('show_list', ['branch' => 1]) }}"> فواتير جمله 1</a>
-            <a class="btn btn-outline-primary @if ($branch == 3) {{ 'active' }} @endif "
-            href="{{ route('show_list', ['branch' => 3]) }}">الاخطارات</a>
+        <a class="btn btn-outline-primary @if ($branch == 2) {{ 'active' }} @endif "
+            href="{{ route('show_list', ['branch' => 2]) }}">فواتير جمله 2</a>
     </div>
 
 
 
 
-    <div class="container">
+    <div class="container table-container">
         <table class="table">
             <thead>
                 <tr>

@@ -1,0 +1,41 @@
+
+
+
+@media (max-width: 1000px) {
+    /* Start Header */
+    header {
+        .navbar-toggler {
+            display: flex;
+        }
+
+        nav {
+            display: none;
+            width: auto;
+        }
+    }
+    /* End Header */
+}
+
+
+@media (max-width: 786px) {
+
+    .head-card {
+        margin: 0 auto;
+
+        .alert-box {
+            display: none;
+        }
+
+    }
+
+    .table {
+        th {
+            &:first-child,
+            &:nth-child(2),
+            &:nth-child(4),
+            &:last-child {
+                display: none;
+            }
+        }
+    }
+}

@@ -5,20 +5,20 @@
 <!-- تحسين رسائل الخطأ -->
 
 
-<div class="container">
+<div class="container-barren">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm mt-5">
+        <div class="col-md-8 sub-container">
+            <div class="card shadow-sm mt-5 sub-container-2">
                 <div class="card-header bg-primary text-white text-center">
                     <h5 class="mb-0">تسجيل الإيرادات</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body card-box-2">
                     <form id="revenueForm" method="POST" action="{{route('creat_revenuse_1')}}" class="mt-3">
                         @csrf
                         <div class="mb-4">
                             <label class="form-label fw-bold">ادخل الكمية (بالألف كيلو جرام)</label>
                             <div class="input-group">
-                                <input type="number" step="0.001" id="toon" onkeyup="change(1)" name="toon" value="{{ old('toon') }}" 
+                                <input type="number" step="0.001" id="toon" onkeyup="change(1)" name="toon" value="{{ old('toon') }}"
                                        class="form-control" placeholder="ادخل الكمية بالطن">
                                 <span class="input-group-text">طن</span>
                             </div>
@@ -26,7 +26,7 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold">ادخل الكمية (بالكيلو جرام)</label>
                             <div class="input-group">
-                                <input type="number" step="0.001" id="kg" onkeyup="change_2(2)" name="kg" value="{{ old('kg') }}" 
+                                <input type="number" step="0.001" id="kg" onkeyup="change_2(2)" name="kg" value="{{ old('kg') }}"
                                        class="form-control" placeholder="ادخل الكمية بالكيلو جرام">
                                 <span class="input-group-text">كجم</span>
                             </div>
@@ -114,11 +114,11 @@ kg.addEventListener('input', function() {
 document.getElementById('submitBtn').addEventListener('click', function() {
     let toonValue = toon.value || '0';
     let kgValue = kg.value || '0';
-    
+
     // عرض القيم في نافذة التأكيد
     document.getElementById('confirmToon').textContent = toonValue + ' طن';
     document.getElementById('confirmKg').textContent = kgValue + ' كجم';
-    
+
     // فتح نافذة التأكيد
     var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
     confirmModal.show();

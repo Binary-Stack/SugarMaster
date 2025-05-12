@@ -3,18 +3,16 @@
 
 @section('title') بينات الحساب  @endsection()
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
+<div class="py-5 profile-container">
+    <div class="sub-container">
+      <div class="col-md-8" style="margin: 0 auto;">
         <div class="card shadow-sm p-4">
-            <div class="text-end mb-3">
-                <img src="{{ asset('storage/' . $user->image) }}" 
-                     alt="صورة المستخدم" 
-                     class="rounded-circle img-thumbnail profile-thumb"
-                     style="width: 60px; cursor: pointer;"
+            <div class="text-end mb-3 profile-card-head">
+                <img src="{{ asset('storage/' . $user->image) }}"
+                     alt="صورة المستخدم"
                      data-bs-toggle="modal" data-bs-target="#profileModal">
-              </div>  
-          <h2 class="text-center mb-4">بيانات المستخدم</h2>
+                     <h2 class="text-center mb-4">بيانات المستخدم</h2>
+              </div>
           <div class="row mb-3">
             <div class="col-sm-4 fw-bold">الاسم الكامل:</div>
             <div class="col-sm-8">{{$user->name}}</div>
@@ -38,7 +36,7 @@
           <div class="d-flex justify-content-between align-items-center mt-4">
             <a href="{{ route('profile' , ['status' => "edit"  ]) }}" class="btn btn-primary">تعديل البيانات</a>
             {{-- <a href="{{ route('EditPassword') }}" class="btn btn-primary">تغيير كلمه المرور</a> --}}
-          
+
             <form action="{{ route('logout') }}" method="POST" class="m-0">
               @csrf
               <button type="submit" class="btn btn-outline-danger">تسجيل الخروج</button>
@@ -53,12 +51,12 @@
   <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content p-3">
-              <img src="{{ asset('storage/' . $user->image) }} " 
+              <img src="{{ asset('storage/' . $user->image) }} "
               alt="الصورة المكبرة"
               class="img-fluid rounded">
             </div>
         </div>
         <!-- Modal -->
   </div>
-  
+
 @endsection

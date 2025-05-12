@@ -1,0 +1,39 @@
+
+
+.bars-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 40px;
+    height: 40px;
+    background-color: var(--secondary-color);
+    padding: 0 4px;
+    border: 1px solid var(--primary-color);
+    transition: 0.1s;
+
+    span {
+        width: 90%;
+        height: 2px;
+        margin: 0 auto;
+        background-color: var(--primary-color);
+
+        &:nth-child(2) {
+            width: 70%;
+            margin: 0;
+            margin-right: 1px;
+        }
+    }
+
+    &:hover {
+        background-color: var(--primary-color);
+        border-color: var(--secondary-color);
+
+        span {
+            background-color: var(--secondary-color);
+
+            &:nth-child(2) {
+                width: 90%;
+            }
+        }
+    }
+}

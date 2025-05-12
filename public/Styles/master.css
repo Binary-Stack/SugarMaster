@@ -1,0 +1,61 @@
+/* Start Import */
+@import url("all.min.css"); /* Font Awesome */
+@import url("Components/header.css");
+@import url("Components/bars_btn.css");
+@import url("Components/button.css");
+@import url("Components/comprehensive_exchange.css");
+@import url("Pages/creat_list.css");
+@import url("Pages/show_list.css");
+@import url("Pages/show_taking.css");
+@import url("Pages/creat_revenuse.css");
+@import url("Pages/profile.css");
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap');
+@import url("responsive.css");
+/* End Import */
+
+
+
+/* Start Variables */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #ecf0f1;
+    --accent-color: #3498db;
+    --text-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --font-family: "Changa", "sans-serif";
+    --font-size: 16px;
+    --line-height: 1.5;
+    --main-border-radius: 10px;
+}
+/* End Variables */
+
+
+
+/* Start Global */
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    transition: 0.5s;
+
+    max-width: 100% !important;
+    max-height: 100% !important;
+
+    font-family: var(--font-family);
+    text-align: center;
+}
+
+::selection {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+html {
+    direction: rtl;
+}
+
+.container {
+    width: 900px;
+}
+/* End Global */

@@ -1,0 +1,41 @@
+
+
+.add-dealer-container {
+    margin-top: 20px;
+    text-align: start;
+
+    .btn {
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        font-weight: 800;
+        margin-right: 15%;
+
+        &:hover {
+            color: var(--secondary-color);
+            background-color: var(--primary-color);
+        }
+
+        &:active {
+            transform: scale(0.98);
+            color: var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+    }
+}
+
+
+.daily-record-form {
+    width: 600px;
+    margin: 60px auto 0;
+
+    .modal-content {
+        .modal-header {
+            display: flex;
+            justify-content: space-between !important;
+
+            * {
+                margin: 0 !important;
+            }
+        }
+    }
+}
