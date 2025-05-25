@@ -14,14 +14,56 @@
     <link href="{{ my_asset('Styles/normalize.css') }}" rel="stylesheet">
     <link href="{{ my_asset('Styles/master.css') }}" rel="stylesheet">
 </head>
+<style>
+    body {
+        visibility: hidden;
+    }
+
+    #loader-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loader {
+        border: 10px solid #f3f3f3;
+        border-top: 10px solid #3498db;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
 
 <body>
+    <div id="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+
+
     <header>
         <a href="branch">
-            <img class="logo" src="{{ asset('Assets/Images/logo.png') }}" alt="System Logo">
+            <img class="logo" src="{{ my_asset('Assets/Images/logo.png') }}" alt="System Logo">
         </a>
 
-        <!-- زر القائمة لفتح القائمة في الشاشات الصغيرة -->
         <button class="navbar-toggler bars-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span></span>
@@ -29,11 +71,9 @@
             <span></span>
         </button>
 
-        <!-- القائمة -->
         <nav>
             <div class="container" style="* {display: inline-block;}">
 
-                <!-- الروابط داخل القائمة -->
                 <div class="navbar-items" id="navbarNav">
                     <ul class="navbar-nav w-100 d-flex justify-content-between">
                         <li class="nav-item">
@@ -50,8 +90,10 @@
                         </li>
                         <li class="nav-item profile-nav-item">
                             <a class="  btn  abdo the" href="{{ route('profile') }}">الملف الشخصي</a>
-                            <img src="{{ asset('Assets/Images/avatar.png') }}" alt="Personal Picture">
-                            <!-- اجعلها صورة المستخدم -->
+                            @if (Auth::user()->image)
+                                <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Personal Picture"
+                                    class="profile-image">
+                            @endif
                         </li>
                     </ul>
                 </div>
@@ -94,6 +136,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ my_asset('mainStyle/js_frist.js') }}"></script>
     <script src="{{ my_asset('jquery-3.7.1.min.js') }}"></script>
+    <script>
+        window.addEventListener("load", function() {
+            document.body.style.visibility = "visible";
+
+            const loader = document.getElementById("loader-wrapper");
+            if (loader) {
+                loader.style.transition = "opacity 0.5s ease";
+                loader.style.opacity = 0;
+                setTimeout(() => {
+                    loader.remove();
+                }, 500);
+            }
+        });
+    </script>
+
+
 
 </body>
 

@@ -21,7 +21,7 @@ class ActionsController extends Controller
             return redirect()->back()->withErrors($valedate)->withInput();
         }
 
-        $path = ($request->hasFile('photo')) ? $request->file('photo')->store('images', 'public') : null;
+        $path = ($request->hasFile('photo')) ? $request->file('photo')->store('bills_photos', 'public') : null;
 
         $check = $this->checkQuantity($request, "check");
         if ($check == false) {
@@ -145,13 +145,13 @@ class ActionsController extends Controller
         ];
 
         if ($request->hasFile('photo')) {
-            if ($updata->photo && Storage::disk('public')->exists($updata->photo)) {
-                Storage::disk('public')->delete($updata->photo);
+            if ($updata->images && Storage::disk('public')->exists($updata->images)) {
+                Storage::disk('public')->delete($updata->images);
             }
 
             $photo = $request->file('photo');
             $photoPath = $photo->store('bills_photos', 'public');
-            $updateData['photo'] = $photoPath;
+            $updateData['images'] = $photoPath;
         }
 
         $updata->update($updateData);
