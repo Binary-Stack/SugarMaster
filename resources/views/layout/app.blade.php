@@ -1,3 +1,7 @@
+@php
+    use function App\Url\my_asset;
+    // my_asset('nool');
+@endphp
 <!DOCTYPE html>
 <html lang="ar">
 
@@ -5,10 +9,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'title')</title>
-    <link href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link href="{{ asset('Styles/normalize.css') }}" rel="stylesheet">
-    <link href="{{ asset('Styles/master.css') }}" rel="stylesheet">
+    <link href="{{ my_asset('bootstrap-5.3.3-dist/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ my_asset('Styles/normalize.css') }}" rel="stylesheet">
+    <link href="{{ my_asset('Styles/master.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -46,7 +50,8 @@
                         </li>
                         <li class="nav-item profile-nav-item">
                             <a class="  btn  abdo the" href="{{ route('profile') }}">الملف الشخصي</a>
-                            <img src="{{ asset('Assets/Images/avatar.png') }}" alt="Personal Picture"> <!-- اجعلها صورة المستخدم -->
+                            <img src="{{ asset('Assets/Images/avatar.png') }}" alt="Personal Picture">
+                            <!-- اجعلها صورة المستخدم -->
                         </li>
                     </ul>
                 </div>
@@ -87,8 +92,8 @@
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('mainStyle/js_frist.js') }}"></script>
-    <script src="{{ asset('jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ my_asset('mainStyle/js_frist.js') }}"></script>
+    <script src="{{ my_asset('jquery-3.7.1.min.js') }}"></script>
 
 </body>
 
