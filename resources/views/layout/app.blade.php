@@ -1,6 +1,5 @@
 @php
     use function App\Url\my_asset;
-    // my_asset('nool');
 @endphp
 <!DOCTYPE html>
 <html lang="ar">
