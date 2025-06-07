@@ -242,7 +242,7 @@ class ActionsController extends Controller
             Carbon::setLocale('ar');
             $bills = Bill::selectRaw("
     DATE(created_at) as date_only, 
-    SUM(kgg) as total_bills,
+    SUM(kg) as total_bills,
     COUNT(CASE WHEN type_branch = 1 THEN 1 END) as branch_1,
     COUNT(CASE WHEN type_branch = 2 THEN 1 END) as branch_2,
     COUNT(CASE WHEN type_branch = 3 THEN 1 END) as branch_3

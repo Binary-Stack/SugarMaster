@@ -19,22 +19,22 @@ class PasswordController extends Controller
     
     public function update(Request $request)
     {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|confirmed|min:8',
-        ]);
+        // $request->validate([
+        //     'current_password' => 'required',
+        //     'password' => 'required|confirmed|min:8',
+        // ]);
     
-        /** @var User $user */
-        $user = Auth::user();
+        // /** @var User $user */
+        // $user = Auth::user();
     
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة.']);
-        }
+        // if (!Hash::check($request->current_password, $user->password)) {
+        //     return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة.']);
+        // }
     
-        $user->password = Hash::make($request->password);
-        $user->save(); // الآن لن يظهر الخطأ
+        // $user->password = Hash::make($request->password);
+        // $user->save(); // الآن لن يظهر الخطأ
     
-        return back()->with('success', 'تم تغيير كلمة المرور بنجاح.');
+        return back()->with('success', 'This site is for display purposes only cant change password.');
     }
     
 }

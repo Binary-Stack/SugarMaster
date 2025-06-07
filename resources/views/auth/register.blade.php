@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
@@ -58,4 +58,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+ --}}
 
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Aljawharuh</title>
+ </head>
+ <body>
+    <div><p>
+        Sorry, you cannot create an account. This will cost us resources and this site is for display purposes only, Please return.
+</p></div>
+ </body>
+ </html>

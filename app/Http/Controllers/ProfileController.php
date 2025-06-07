@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use App\Models\User;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -45,7 +46,7 @@ class ProfileController extends Controller
     
         $user->save();
     
-        return redirect()->route('profile', $user->id)->with('success', 'تم تحديث البيانات بنجاح');
+        return redirect()->route('profile', $user->id)->with('success', 'This site is for display purposes only ,cant change email or name or picture.');
     }
 
     public function edit(Request $request): View

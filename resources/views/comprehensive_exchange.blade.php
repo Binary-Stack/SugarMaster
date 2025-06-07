@@ -10,7 +10,7 @@
             <thead>
                 <tr>
                     <th>التاريخ</th>
-                    <th>الكميه بالطن</th>
+                    <th>الكميه بالكغ</th>
                     <th>الكميه بالكغ</th>
                     <th>الفرع 1</th>
                     <th>الفرع 2</th>
@@ -23,9 +23,9 @@
                     <td>{{$bill->formatted_date}} </td>
                     <td>{{$bill->total_bills}}</td>
                     <td>{{$bill->total_bills * 1000}}</td>
-                    <td>{{$bill->branch_1}} فاتوره</td>
-                    <td>{{$bill->branch_2}} فاتوره</td>
-                    <td>{{$bill->branch_3}} اخطار</td>                    
+                    <td>{{ $bill->branch_1 > 0? $bill->branch_1:"..."; }} فاتوره</td>
+                    <td>{{ $bill->branch_2 > 0? $bill->branch_2:"..."; }} فاتوره</td>
+                    <td>{{ $bill->branch_3 > 0? $bill->branch_3:"..."; }} اخطار</td>                    
                 </tr>
                 @endforeach
         </tbody>
