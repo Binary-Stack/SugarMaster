@@ -250,7 +250,7 @@
     <!-- شريط التنقل الجديد -->
     <nav class="custom-navbar">
         <div class="custom-navbar-container">
-            <a href="branch">
+            <a href="#">
                 <img class="custom-logo" src="{{ my_asset('Assets/Images/logo.png') }}" alt="System Logo">
             </a>
 
