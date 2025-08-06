@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -19,22 +17,21 @@ class PasswordController extends Controller
     
     public function update(Request $request)
     {
-        // $request->validate([
-        //     'current_password' => 'required',
-        //     'password' => 'required|confirmed|min:8',
-        // ]);
+        $request->validate([
+            'current_password' => 'required',
+            'password' =>   'required|confirmed|min:8',
+        ]);
     
-        // /** @var User $user */
-        // $user = Auth::user();
+        $user = \App\Models\User::find(Auth::id());
     
-        // if (!Hash::check($request->current_password, $user->password)) {
-        //     return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة.']);
-        // }
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة.']);
+        }
     
-        // $user->password = Hash::make($request->password);
-        // $user->save(); // الآن لن يظهر الخطأ
+        $user->password = Hash::make($request->password);
+        $user->save(); 
     
-        return back()->with('success', 'This site is for display purposes only cant change password.');
+        return back()->with('success', 'تم تحديث كلمة المرور بنجاح!');
     }
     
 }
