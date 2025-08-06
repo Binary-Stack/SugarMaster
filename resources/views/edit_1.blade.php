@@ -1,6 +1,5 @@
-{{-- @dd($bills , $users) --}}
+{{-- {{ dd(function_exists('my_asset')) }} --}}
 @extends('layout.app')
-
 @section('title')
     تعديل(يومي)
 @endsection()
@@ -37,19 +36,19 @@
                 value="{{ $bills->kg }}" name="numberOFhightK" placeholder="الكميه المنصرفه(بالكيلوا)">
         </div>
 
+        <input type="file" name="photo" id="photoInput" class="form-control" accept="image/*">
+        @if($bills->images && file_exists(public_path('storage/'.$bills->images)))
         <div class="mb-3">
             <label class="form-label">تحميل صورة</label>
-            <input type="file" name="photo" id="photoInput" class="form-control" accept="image/*">
-            @if($bills->images)
                 <div class="mt-2">
-                    <img src="{{ asset('storage/'.$bills->images) }}" alt="صورة الفاتورة" class="img-thumbnail" style="max-height: 100px">
+                    <img src="{{ my_asset('storage/'.$bills->images) }}" alt="صورة الفاتورة" class="img-thumbnail" style="max-height: 100px">
                     <p class="small text-muted">الصورة الحالية</p>
                 </div>
+            </div>
             @endif
-        </div>
 
         <div class="mb-3">
-            <label class="form-label d-block">الفرع</label>
+            <label class="form-label d-block mt-3">الفرع</label>
 
             <div class="form-check form-check-inline">
                 <input class="form-check-input branchRadio" type="radio" name="type_branch" id="branch1" value="1"

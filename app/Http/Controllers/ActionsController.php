@@ -11,9 +11,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as PDF;
+
 
 class ActionsController extends Controller
 {
+
+    
+    public function __construct() {
+    }
     public function storeList(Request $request)
     {
         $valedate = $this->Validator($request, "storeList");
@@ -119,7 +125,7 @@ class ActionsController extends Controller
 
     public function update(Request $request, string $id, string $branch)
     {
-        $validatedData = $request->validate([
+         $request->validate([
             'numberOFlist' => 'required|numeric',
             'nameOFtager' => 'required|exists:consumers,id',
             'numberOFhightT' => 'required|numeric|min:0',
@@ -149,9 +155,7 @@ class ActionsController extends Controller
                 Storage::disk('public')->delete($updata->images);
             }
 
-            $photo = $request->file('photo');
-            $photoPath = $photo->store('bills_photos', 'public');
-            $updateData['images'] = $photoPath;
+            $updateData['images'] = $request->file('photo')->store('bills_photos', 'public');
         }
 
         $updata->update($updateData);
@@ -285,5 +289,12 @@ class ActionsController extends Controller
             "countBranche_2" => $countBranche_2,
             "countBranche_3" => $countBranche_3
         ]);
+    }
+
+
+    public function printBills( string $id) {
+        $bill = Bill::findOrFail($id);
+        $pdf = PDF::loadView('printBills', compact('bill'));
+        return $pdf->stream('printBills.pdf');
     }
 }

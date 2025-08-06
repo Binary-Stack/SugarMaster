@@ -1,6 +1,3 @@
-@php
-    use function App\Url\my_asset;
-@endphp
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 

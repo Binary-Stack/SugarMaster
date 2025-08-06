@@ -115,8 +115,11 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#confirmDeleteModal_{{ $date->id }}">حذف</button>
+                                    data-bs-target="#confirmDeleteModal_{{ $date->id }}">حذف</button>
                                 </form>
+                                <td>
+                                    <a href="{{ route('print', $date['id']) }}" class="btn btn-danger" >طباعه</a>
+                                </td>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="confirmDeleteModal_{{ $date->id }}" tabindex="-1"

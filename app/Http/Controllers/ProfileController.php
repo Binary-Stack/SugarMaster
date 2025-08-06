@@ -46,7 +46,7 @@ class ProfileController extends Controller
     
         $user->save();
     
-        return redirect()->route('profile', $user->id)->with('success', 'This site is for display purposes only ,cant change email or name or picture.');
+        return redirect()->route('profile', $user->id)->with('success', 'Data updated successfully.');
     }
 
     public function edit(Request $request): View

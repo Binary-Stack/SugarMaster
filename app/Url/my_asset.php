@@ -1,10 +1,4 @@
 <?php
-
-namespace App\Url;
-
-
-
-
 function my_asset($path)
 {
     if (app()->environment('production')) {

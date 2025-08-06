@@ -31,3 +31,4 @@ Route::put('/updatePassword', [Profile::class, 'updatePassword'])->name('updateP
 Route::put('/the_5/{id}/UP/{branch}', [ActionsController::class, "update"])->name('Update');
 
 Route::delete('/the_5/{id}/DE/{branch}', [ActionsController::class, "destroy"])->name('Destroy');
+Route::get('/print/{id}', [ActionsController::class, "printBills"])->name('print');
